@@ -1,7 +1,5 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
 
@@ -36,15 +34,30 @@ public class Main {
 
                 System.out.println("Jogo adicionado com sucesso. ");
 
-                System.out.println(listaDeJogos.get(0));
+                System.out.println(jogo01);
 
                 break;
             case 2:
                 System.out.println("Digite o jogo a ser consultado:");
+                String consulta = entrada.nextLine();
+                boolean encontrado = false;
+                for (Jogo jogo : listaDeJogos){
+                    if(jogo.getTitulo().equalsIgnoreCase(consulta)){
+                        System.out.println("Jogo encontrado: ");
+                        System.out.println(jogo);
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    System.out.println("Jogo não encontrado.");
+                }
+                break;
+        }
+
 
 
 
         }
     }
-}
 }

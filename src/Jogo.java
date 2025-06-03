@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Jogo {
     private String titulo;
     private String genero;
@@ -11,12 +13,22 @@ public class Jogo {
         this.preco = preco;
     }
 
+    public void buscarJogoPorTitulo(ArrayList<Jogo> listaDeJogos, String titulo){
+        for (Jogo jogo : listaDeJogos){
+            if(jogo.getTitulo().equalsIgnoreCase(titulo)){
+                System.out.println(jogo);
+                return;
+            }
+        }
+    }
+
     public String toString() {
         return "Título: " + titulo + "\n" +
                 "Gênero: " + genero + "\n" +
                 "Desenvolvedora: " + desenvolvedora + "\n" +
                 "Preço: R$" + preco;
     }
+
 
     public String getTitulo(){
         return titulo;
