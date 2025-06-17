@@ -1,237 +1,330 @@
-# Sistema de Registro de Jogos - Enhanced Edition v2.0
+# 🎮 Sistema de Registro de Jogos v2.0
 
-Sistema moderno de catálogo de jogos desenvolvido em Java com JavaFX e suporte a múltiplos bancos de dados.
+Sistema completo de gerenciamento de jogos desenvolvido em Java com múltiplas interfaces (JavaFX, Console, Web) e suporte a PostgreSQL e SQLite.
 
-## 🎮 Funcionalidades
+## ✨ Funcionalidades
 
-### Principais
-- ✅ **Interface Gráfica Moderna** - Interface JavaFX responsiva e intuitiva
-- ✅ **Múltiplos Bancos de Dados** - SQLite local ou PostgreSQL via Docker
-- ✅ **CRUD Completo** - Criar, Consultar, Atualizar e Excluir jogos
-- ✅ **Busca Avançada** - Por nome e filtro por gênero
-- ✅ **Detalhes Expandidos** - Painel lateral com informações completas
-- ✅ **Validação de Dados** - Validação em tempo real nos formulários
-- ✅ **Sistema Docker** - PostgreSQL + pgAdmin + Redis
+- 📋 **CRUD Completo**: Criar, listar, atualizar e remover jogos
+- 🔍 **Busca Avançada**: Pesquisa por nome, gênero, desenvolvedor
+- 📊 **Estatísticas**: Preços médios, avaliações, relatórios
+- 💾 **Duplo Backend**: PostgreSQL (Docker) + SQLite (local)
+- 🖥️ **Múltiplas Interfaces**: JavaFX, Console, Web
 
-### Campos do Jogo
-- **Básicos**: Nome, Preço
-- **Detalhes**: Gênero, Desenvolvedora, Plataforma
-- **Avançados**: Ano de Lançamento, Classificação (0-10), Descrição
-- **Automáticos**: Data de cadastro, Data de última atualização
+## 🚀 Início Rápido
 
-## 🚀 Tecnologias Utilizadas
+### 📦 **Instalação das Dependências**
 
-- **Java 17+** - Linguagem principal
-- **JavaFX 17/19** - Interface gráfica moderna
-- **SQLite / PostgreSQL** - Bancos de dados
-- **Docker & Docker Compose** - Containerização
-- **SLF4J** - Sistema de logging
-- **pgAdmin** - Interface web para PostgreSQL
-- **Redis** - Cache (opcional)
+> ⚠️ **Importante**: As dependências (JARs) não estão no Git para evitar arquivos grandes. Elas são baixadas automaticamente!
 
-## 📋 Pré-requisitos
-
-### Opção 1: SQLite (Mais Simples)
-- Java 17 ou superior
-
-### Opção 2: Docker (Mais Robusto)
-- Java 17 ou superior
-- Docker Desktop
-- Docker Compose
-
-## 🔧 Como Executar
-
-### 🎯 **Opção 1: Teste Rápido (SQLite)**
-
+#### Opção 1: Setup Automático (Recomendado)
 ```bash
-# Testar apenas o backend (100% funcional)
-./run-simple.sh
+# 1. Clonar repositório
+git clone <seu-repo>
+cd SistemaRegistroJogos
 
-# Interface completa com JavaFX
-./run.sh
+# 2. Executar setup (baixa tudo automaticamente)
+./setup.sh
+
+# 3. Usar o sistema
+./run-console-postgres.sh
 ```
 
-### 🐳 **Opção 2: Ambiente Completo (Docker)**
-
+#### Opção 2: Execução Direta (Download Automático)
 ```bash
-# Configurar e iniciar PostgreSQL + pgAdmin
+# Os scripts baixam dependências automaticamente na primeira execução
+./run-console-postgres.sh  # Baixa e executa
+./run-javafx-fixed.sh      # Baixa JavaFX e executa
+```
+
+### Pré-requisitos
+- Java 17+ (obrigatório)
+- Docker (opcional, para PostgreSQL)
+- macOS/Linux/Windows
+
+## 🎯 Interfaces Disponíveis
+
+### 1. 🖥️ Console + PostgreSQL (Recomendado)
+```bash
+./run-console-postgres.sh
+```
+- ✅ **Interface completa no terminal**
+- ✅ **Backend PostgreSQL robusto**
+- ✅ **Funciona em qualquer sistema**
+- 📦 **Download automático**: SQLite + PostgreSQL drivers
+
+### 2. 🌐 Interface Web (pgAdmin)
+```bash
+./docker-setup.sh  # Iniciar PostgreSQL
+# Acesse: http://localhost:8080
+# Login: admin@jogos.com / admin123
+```
+- ✅ **Interface web profissional**
+- ✅ **Gerenciamento completo do banco**
+- ✅ **Visualização de dados**
+
+### 3. 🎮 JavaFX Desktop (Experimental macOS)
+```bash
+./run-javafx-fixed.sh
+```
+- ⚠️ **Pode ter problemas no macOS Apple Silicon**
+- ✅ **Interface gráfica moderna**
+- ✅ **Conecta ao PostgreSQL**
+- 📦 **Download automático**: JavaFX 21 + drivers
+
+### 4. 🔧 SQLite Local (Fallback)
+```bash
+./run-simple.sh
+```
+- ✅ **Backend local simples**
+- ✅ **Sem dependências externas**
+- 📦 **Download automático**: SQLite driver
+
+## 💾 Gestão de Dependências
+
+### Por que não há JARs no Git?
+- **Problema**: JARs são arquivos grandes (20+ MB total)
+- **Solução**: Download automático pelos scripts
+- **Vantagem**: Repositório leve, sempre dependências atualizadas
+
+### O que é baixado automaticamente?
+```
+lib/
+├── sqlite-jdbc-3.42.0.0.jar         # SQLite driver
+├── postgresql-42.6.0.jar            # PostgreSQL driver  
+├── slf4j-api-2.0.7.jar              # Logging API
+├── slf4j-simple-2.0.7.jar           # Logging implementação
+├── javafx-base-21.0.1-*.jar         # JavaFX Core
+├── javafx-controls-21.0.1-*.jar     # JavaFX Controles
+├── javafx-fxml-21.0.1-*.jar         # JavaFX FXML
+└── javafx-graphics-21.0.1-*.jar     # JavaFX Gráficos
+```
+
+### Script de Setup Dedicado
+```bash
+# Baixar todas as dependências de uma vez
+./setup.sh
+
+# O que faz:
+# - Detecta sua plataforma (macOS/Linux/Windows)
+# - Baixa todas as dependências necessárias
+# - Compila o projeto
+# - Testa se tudo está funcionando
+```
+
+## 🏗️ Arquitetura
+
+### Backend
+- **PostgreSQL**: Banco principal em Docker
+- **SQLite**: Backup local automático
+- **DAO Pattern**: Acesso aos dados
+- **Singleton**: Gerenciamento de conexões
+
+### Frontend
+- **JavaFX**: Interface desktop moderna
+- **Console**: Interface terminal interativa
+- **pgAdmin**: Interface web profissional
+
+### Estrutura
+```
+src/main/java/com/sistemaregistrojogos/
+├── Main.java                 # Aplicação principal
+├── database/
+│   ├── DatabaseManager.java # Gerenciador inteligente
+│   ├── JogoDAO.java         # Operações CRUD
+│   └── PostgreSQLManager.java # Conexão PostgreSQL
+├── model/
+│   ├── Jogo.java            # Modelo de dados
+│   └── enums/
+├── view/
+│   ├── MainController.java  # Controlador JavaFX
+│   └── JogoFormController.java
+└── util/
+    └── AlertUtil.java       # Utilitários
+
+lib/                         # 📦 Dependências (baixadas automaticamente)
+├── .gitkeep                # Mantém diretório no Git
+├── *.jar                   # JARs baixados pelos scripts
+
+docker/
+├── docker-compose.yml      # PostgreSQL + pgAdmin + Redis
+├── database/init.sql       # Schema e dados iniciais
+└── docker-setup.sh        # Gerenciamento Docker
+
+scripts de execução/
+├── setup.sh                # 📦 Baixar todas dependências
+├── run-console-postgres.sh # Interface console
+├── run-javafx-fixed.sh    # JavaFX otimizado
+├── run-simple.sh          # SQLite local
+└── run-macos.sh          # Diagnóstico macOS
+```
+
+## 🐳 Docker Setup
+
+### Serviços Incluídos
+- **PostgreSQL 15**: Banco principal
+- **pgAdmin 4**: Interface web de administração
+- **Redis**: Cache (opcional)
+
+### Portas
+- PostgreSQL: `localhost:5432`
+- pgAdmin: `localhost:8080`
+- Redis: `localhost:6379`
+
+### Comandos Docker
+```bash
+# Iniciar todos os serviços
 ./docker-setup.sh
 
-# Escolher opção 1 para iniciar serviços
-# Acessar pgAdmin: http://localhost:8080
-```
+# Verificar status
+docker ps
 
-**Credenciais Docker:**
-- **PostgreSQL**: `localhost:5432` | User: `jogos_user` | Pass: `jogos_password`
-- **pgAdmin**: `localhost:8080` | Email: `admin@jogos.com` | Pass: `admin123`
-
-## 🏗️ Arquitetura do Projeto
-
-```
-src/
-├── main/
-│   ├── java/com/sistemaregistrojogos/
-│   │   ├── Main.java                    # Classe principal
-│   │   ├── model/
-│   │   │   ├── Produto.java            # Classe base
-│   │   │   └── Jogo.java               # Modelo do jogo
-│   │   ├── database/
-│   │   │   ├── DatabaseManager.java    # Gerenciador BD
-│   │   │   └── JogoDAO.java            # Acesso a dados
-│   │   ├── view/
-│   │   │   ├── MainController.java     # Controller principal
-│   │   │   └── JogoFormController.java # Controller formulário
-│   │   └── util/
-│   │       └── AlertUtil.java          # Utilitários de alerta
-│   └── resources/
-│       ├── fxml/
-│       │   ├── main-view.fxml          # Layout principal
-│       │   └── jogo-form.fxml          # Layout formulário
-│       └── css/
-│           └── style.css               # Estilos da interface
-├── docker-compose.yml                  # Configuração Docker
-├── database/
-│   └── init.sql                        # Schema PostgreSQL
-└── scripts/
-    ├── run.sh                          # Executar com JavaFX
-    ├── run-simple.sh                   # Teste SQLite
-    └── docker-setup.sh                 # Gerenciar Docker
-```
-
-## 📊 Opções de Banco de Dados
-
-### SQLite (Padrão)
-- ✅ **Pronto para usar** - Sem configuração
-- ✅ **Arquivo local** - `jogos.db`
-- ✅ **Performance boa** - Para uso pessoal
-- ✅ **Zero dependências** - Tudo incluído
-
-### PostgreSQL (Docker)
-- ✅ **Banco profissional** - Recursos avançados
-- ✅ **Interface web** - pgAdmin incluído
-- ✅ **Backup automático** - Scripts incluídos
-- ✅ **Escalabilidade** - Para produção
-- ✅ **Dados pré-carregados** - Gêneros, desenvolvedoras, etc.
-
-## 🎨 Interface
-
-### Tela Principal
-- **Tabela** - Lista todos os jogos com colunas organizadas
-- **Toolbar** - Botões para ações e busca
-- **Painel Lateral** - Detalhes do jogo selecionado
-- **Barra de Status** - Informações e contadores
-
-### Formulário de Jogo
-- **Campos Obrigatórios** - Nome e Preço
-- **Campos Opcionais** - Todos os demais
-- **Validação** - Em tempo real
-- **Controles Especiais** - Slider para classificação, spinner para ano
-
-## 🔍 Funcionalidades de Busca
-
-1. **Busca por Nome** - Campo de texto na toolbar
-2. **Filtro por Gênero** - ComboBox com gêneros predefinidos
-3. **Limpar Filtros** - Botão para resetar busca
-
-## 🛡️ Validações
-
-- **Nome**: Obrigatório, não vazio
-- **Preço**: Obrigatório, numérico, ≥ 0
-- **Duplicação**: Nome único no banco
-- **Formato**: Preço aceita vírgula ou ponto
-
-## 🧪 Scripts Disponíveis
-
-| Script | Descrição | Uso |
-|--------|-----------|-----|
-| `./run-simple.sh` | Teste backend SQLite | Desenvolvimento |
-| `./run.sh` | Interface completa JavaFX | Uso normal |
-| `./docker-setup.sh` | Gerenciar PostgreSQL | Produção |
-
-## 🐳 Comandos Docker Úteis
-
-```bash
-# Iniciar apenas PostgreSQL
-docker-compose up postgres -d
-
-# Ver logs
+# Logs
 docker-compose logs -f
 
-# Backup manual
-docker exec jogos_postgres pg_dump -U jogos_user sistemaregistrojogos > backup.sql
-
-# Acessar psql
-docker exec -it jogos_postgres psql -U jogos_user -d sistemaregistrojogos
+# Parar serviços
+docker-compose down
 ```
 
-## 📝 Logs
+## 📊 Modelo de Dados
 
-O sistema mantém logs detalhados usando SLF4J:
-- Operações do banco de dados
-- Ações do usuário
-- Erros e exceções
+### Tabela: jogos
+```sql
+CREATE TABLE jogos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL UNIQUE,
+    preco DECIMAL(10,2) NOT NULL CHECK(preco >= 0),
+    genero VARCHAR(100),
+    desenvolvedor VARCHAR(255),
+    plataforma VARCHAR(100),
+    ano_lancamento INTEGER CHECK(ano_lancamento >= 1970 AND ano_lancamento <= 2050),
+    avaliacao DECIMAL(3,1) CHECK(avaliacao >= 0 AND avaliacao <= 10),
+    descricao TEXT,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-## 🎯 Status Atual
+## 🔧 Solução de Problemas
 
-### ✅ **100% Funcional**
-- ✅ Backend SQLite completo
-- ✅ CRUD todas as operações
-- ✅ Interface JavaFX criada
-- ✅ Docker PostgreSQL pronto
-- ✅ Scripts automatizados
-- ✅ Documentação completa
+### "Dependências não encontradas"
+```bash
+# Solução 1: Setup automático
+./setup.sh
 
-### 🔄 **Melhorias Contínuas**
-- Interface JavaFX (depende do JavaFX local)
-- Otimizações de performance
-- Novos recursos
+# Solução 2: Executar script direto (baixa automaticamente)
+./run-console-postgres.sh
 
-## 🎉 Melhorias da Nova Versão
+# Solução 3: Verificar se Java está instalado
+java -version
+```
 
-Comparado à versão original em console:
+### JavaFX não funciona no macOS
+```bash
+# Use a interface console (100% funcional)
+./run-console-postgres.sh
 
-### ✨ Novas Funcionalidades
-- Interface gráfica completa
-- Múltiplos bancos de dados (SQLite + PostgreSQL)
-- Campos expandidos (10+ vs 4 originais)
-- Busca e filtros avançados
-- Validação em tempo real
-- Sistema Docker completo
-- Logs detalhados
-- Backup automático
+# Ou interface web
+./docker-setup.sh
+```
 
-### 🔧 Melhorias Técnicas
-- Arquitetura MVC organizada
-- Padrões de design (DAO, Singleton)
-- Tratamento robusto de erros
-- Build automatizado sem Maven
-- Código documentado e estruturado
-- Suporte a múltiplas plataformas
+### PostgreSQL não conecta
+```bash
+# Verificar Docker
+docker ps
 
-## 🤝 Contribuição
+# Reiniciar PostgreSQL
+docker-compose restart postgres
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
+# Usar SQLite como fallback
+./run-simple.sh
+```
 
-## 📄 Licença
+### Problemas de compilação
+```bash
+# Limpar e recompilar
+rm -rf build/ lib/
+./setup.sh
+```
 
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para detalhes.
+## 🎮 Exemplos de Uso
 
-## 👨‍💻 Autor
+### Setup Inicial
+```bash
+$ git clone <seu-repo>
+$ cd SistemaRegistroJogos
+$ ./setup.sh
 
-Desenvolvido como exemplo de aplicação Java moderna com JavaFX e containerização.
+🎮==============================================
+    Sistema de Registro de Jogos v2.0
+            Setup de Dependências
+===============================================
+✅ Java 24 detectado
+🎯 Plataforma detectada: mac-aarch64
+
+📦 Baixando todas as dependências...
+  📥 Baixando SQLite JDBC...
+  ✅ SQLite JDBC baixado com sucesso
+  📥 Baixando PostgreSQL JDBC...
+  ✅ PostgreSQL JDBC baixado com sucesso
+...
+🎉 SETUP CONCLUÍDO COM SUCESSO!
+```
+
+### Interface Console
+```bash
+$ ./run-console-postgres.sh
+
+📋 MENU PRINCIPAL:
+   1. 📊 Listar todos os jogos
+   2. ➕ Adicionar novo jogo
+   3. 🔍 Buscar jogos
+   4. 📈 Estatísticas
+   5. 🗑️  Remover jogo
+   6. 🌐 Abrir pgAdmin (Web)
+   7. ❌ Sair
+
+Escolha uma opção (1-7): 1
+
+📊 LISTANDO JOGOS:
+ id |      nome       |   preco   | genero | desenvolvedor  | nota
+----+-----------------+-----------+--------+----------------+------
+  1 | Cyberpunk 2077  | R$ 199.99 | RPG    | CD Projekt RED | 8.5/10
+  2 | The Witcher 3   | R$ 89.99  | RPG    | CD Projekt RED | 9.8/10
+```
+
+### Conectar via psql
+```bash
+psql -h localhost -p 5432 -U jogos_user -d sistemaregistrojogos
+```
+
+## 📝 Licença
+
+Este projeto é livre para uso educacional e pessoal.
 
 ---
 
-**Sistema de Registro de Jogos v2.0** - Transformação completa com Docker! 🚀
+## 🏆 Status do Projeto
 
-### 🎯 **Como Começar Agora**
+- ✅ **Backend PostgreSQL**: 100% funcional
+- ✅ **Interface Console**: 100% funcional  
+- ✅ **Interface Web**: 100% funcional
+- ⚠️ **JavaFX Desktop**: Funcional (problemas conhecidos no macOS)
+- ✅ **SQLite Fallback**: 100% funcional
+- ✅ **Docker Setup**: 100% funcional
+- ✅ **Download Automático**: 100% funcional
 
-1. **Teste Simples**: `./run-simple.sh` (SQLite)
-2. **Ambiente Completo**: `./docker-setup.sh` (PostgreSQL)
-3. **Interface**: `./run.sh` (JavaFX)
+## 💡 Para Novos Usuários
 
-> **Backend 100% funcional! Interface quase pronta!** 🎮
+**Primeira vez clonando?**
+```bash
+# Comando único para ter tudo funcionando:
+git clone <repo> && cd SistemaRegistroJogos && ./setup.sh
+```
+
+**Quer só testar rapidamente?**
+```bash
+# Executa direto (baixa dependências automaticamente):
+./run-console-postgres.sh
+```
+
+**Sistema completo e pronto para produção!** 🎉
