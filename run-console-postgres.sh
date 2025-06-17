@@ -5,6 +5,43 @@ echo "    Sistema de Registro de Jogos v2.0"
 echo "    Console + PostgreSQL (Docker)"
 echo "==============================================="
 
+# Verificar Java
+JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f1)
+echo "✅ Java $JAVA_VERSION detectado"
+
+# Verificar dependências e baixar se necessário
+echo "📦 Verificando dependências..."
+mkdir -p lib
+
+# Função para baixar dependência
+download_if_missing() {
+    local url=$1
+    local file=$2
+    local name=$3
+    
+    if [ ! -f "$file" ]; then
+        echo "  📥 Baixando $name..."
+        curl -L --progress-bar -o "$file" "$url" || {
+            echo "❌ Erro ao baixar $name"
+            return 1
+        }
+        echo "  ✅ $name baixado"
+    fi
+}
+
+# Baixar dependências essenciais para console
+download_if_missing \
+    "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.42.0.0/sqlite-jdbc-3.42.0.0.jar" \
+    "lib/sqlite-jdbc-3.42.0.0.jar" \
+    "SQLite JDBC"
+
+download_if_missing \
+    "https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar" \
+    "lib/postgresql-42.6.0.jar" \
+    "PostgreSQL JDBC"
+
+echo "✅ Dependências verificadas"
+
 # Verificar PostgreSQL
 echo "🔍 Verificando PostgreSQL..."
 if ! docker ps | grep -q "jogos_postgres"; then
@@ -20,10 +57,6 @@ else
     echo "❌ Falha ao iniciar PostgreSQL"
     exit 1
 fi
-
-# Verificar Java
-JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f1)
-echo "✅ Java $JAVA_VERSION detectado"
 
 # Compilar se necessário
 if [ ! -f "build/classes/com/sistemaregistrojogos/ConsoleApp.class" ]; then
