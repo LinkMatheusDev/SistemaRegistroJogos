@@ -27,3 +27,53 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Build artifacts
+build/
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Dependencies (downloaded by scripts)
+lib/
+!lib/.gitkeep
+
+# Database files
+*.db
+*.sqlite
+*.db-journal
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Docker volumes
+postgres_data/
+pgadmin_data/
+redis_data/
+
+# Backup files
+backup_*.sql
+*.backup
+
+# Environment files
+.env
+.env.local
