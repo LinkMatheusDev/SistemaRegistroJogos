@@ -20,7 +20,7 @@ public class JogoDAO {
 
     public boolean inserir(Jogo jogo) {
         String sql = """
-            INSERT INTO jogos (nome, preco, genero, desenvolvedora, plataforma, 
+            INSERT INTO jogos (nome, preco, genero, desenvolvedor, plataforma, 
                              ano_lancamento, classificacao, descricao, data_cadastro, data_atualizacao)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
@@ -63,7 +63,7 @@ public class JogoDAO {
 
     public Optional<Jogo> buscarPorId(int id) {
         String sql = """
-            SELECT id, nome, preco, genero, desenvolvedora, plataforma, 
+            SELECT id, nome, preco, genero, desenvolvedor, plataforma, 
                    ano_lancamento, classificacao, descricao, data_cadastro, data_atualizacao
             FROM jogos WHERE id = ?
         """;
@@ -86,7 +86,7 @@ public class JogoDAO {
 
     public Optional<Jogo> buscarPorNome(String nome) {
         String sql = """
-            SELECT id, nome, preco, genero, desenvolvedora, plataforma, 
+            SELECT id, nome, preco, genero, desenvolvedor, plataforma, 
                    ano_lancamento, classificacao, descricao, data_cadastro, data_atualizacao
             FROM jogos WHERE LOWER(nome) = LOWER(?)
         """;
@@ -110,7 +110,7 @@ public class JogoDAO {
     public List<Jogo> listarTodos() {
         List<Jogo> jogos = new ArrayList<>();
         String sql = """
-            SELECT id, nome, preco, genero, desenvolvedora, plataforma, 
+            SELECT id, nome, preco, genero, desenvolvedor, plataforma, 
                    ano_lancamento, classificacao, descricao, data_cadastro, data_atualizacao
             FROM jogos ORDER BY nome
         """;
@@ -134,7 +134,7 @@ public class JogoDAO {
     public List<Jogo> buscarPorGenero(String genero) {
         List<Jogo> jogos = new ArrayList<>();
         String sql = """
-            SELECT id, nome, preco, genero, desenvolvedora, plataforma, 
+            SELECT id, nome, preco, genero, desenvolvedor, plataforma, 
                    ano_lancamento, classificacao, descricao, data_cadastro, data_atualizacao
             FROM jogos WHERE LOWER(genero) LIKE LOWER(?) ORDER BY nome
         """;
@@ -157,7 +157,7 @@ public class JogoDAO {
 
     public boolean atualizar(Jogo jogo) {
         String sql = """
-            UPDATE jogos SET nome = ?, preco = ?, genero = ?, desenvolvedora = ?, 
+            UPDATE jogos SET nome = ?, preco = ?, genero = ?, desenvolvedor = ?, 
                            plataforma = ?, ano_lancamento = ?, classificacao = ?, 
                            descricao = ?, data_atualizacao = ?
             WHERE id = ?
@@ -235,7 +235,7 @@ public class JogoDAO {
                 rs.getString("nome"),
                 rs.getDouble("preco"),
                 rs.getString("genero"),
-                rs.getString("desenvolvedora"),
+                rs.getString("desenvolvedor"),
                 rs.getString("plataforma"),
                 rs.getInt("ano_lancamento"),
                 rs.getDouble("classificacao"),

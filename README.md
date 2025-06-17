@@ -9,6 +9,7 @@ Sistema completo de gerenciamento de jogos desenvolvido em Java com múltiplas i
 - 📊 **Estatísticas**: Preços médios, avaliações, relatórios
 - 💾 **Duplo Backend**: PostgreSQL (Docker) + SQLite (local)
 - 🖥️ **Múltiplas Interfaces**: JavaFX, Console, Web
+- 🌍 **Multiplataforma**: Linux, macOS, Windows
 
 ## 🚀 Início Rápido
 
@@ -17,6 +18,8 @@ Sistema completo de gerenciamento de jogos desenvolvido em Java com múltiplas i
 > ⚠️ **Importante**: As dependências (JARs) não estão no Git para evitar arquivos grandes. Elas são baixadas automaticamente!
 
 #### Opção 1: Setup Automático (Recomendado)
+
+**Linux/macOS:**
 ```bash
 # 1. Clonar repositório
 git clone <seu-repo>
@@ -29,24 +32,57 @@ cd SistemaRegistroJogos
 ./run-console-postgres.sh
 ```
 
+**Windows:**
+```cmd
+:: 1. Clonar repositório
+git clone <seu-repo>
+cd SistemaRegistroJogos
+
+:: 2. Executar setup (Batch - funciona em qualquer Windows)
+setup.bat
+
+:: 3. Ou usar PowerShell (mais avançado)
+powershell -ExecutionPolicy Bypass -File setup.ps1
+
+:: 4. Usar o sistema
+run-simple.bat
+```
+
 #### Opção 2: Execução Direta (Download Automático)
+
+**Linux/macOS:**
 ```bash
-# Os scripts baixam dependências automaticamente na primeira execução
 ./run-console-postgres.sh  # Baixa e executa
 ./run-javafx-fixed.sh      # Baixa JavaFX e executa
 ```
 
+**Windows:**
+```cmd
+run-simple.bat             :: Baixa e executa SQLite
+run-javafx.bat             :: Baixa JavaFX e executa
+```
+
 ### Pré-requisitos
-- Java 17+ (obrigatório)
+- Java 17+ (obrigatório) 
 - Docker (opcional, para PostgreSQL)
-- macOS/Linux/Windows
+- Linux/macOS/Windows
 
 ## 🎯 Interfaces Disponíveis
 
 ### 1. 🖥️ Console + PostgreSQL (Recomendado)
+
+**Linux/macOS:**
 ```bash
 ./run-console-postgres.sh
 ```
+
+**Windows:**
+```cmd
+docker-compose up -d  :: Iniciar PostgreSQL primeiro
+:: Interface console com PostgreSQL não disponível ainda no Windows
+:: Use: run-simple.bat (SQLite local)
+```
+
 - ✅ **Interface completa no terminal**
 - ✅ **Backend PostgreSQL robusto**
 - ✅ **Funciona em qualquer sistema**
@@ -54,7 +90,10 @@ cd SistemaRegistroJogos
 
 ### 2. 🌐 Interface Web (pgAdmin)
 ```bash
-./docker-setup.sh  # Iniciar PostgreSQL
+./docker-setup.sh  # Linux/macOS
+# OU
+docker-compose up -d  # Todos os sistemas
+
 # Acesse: http://localhost:8080
 # Login: admin@jogos.com / admin123
 ```
@@ -62,19 +101,35 @@ cd SistemaRegistroJogos
 - ✅ **Gerenciamento completo do banco**
 - ✅ **Visualização de dados**
 
-### 3. 🎮 JavaFX Desktop (Experimental macOS)
+### 3. 🎮 JavaFX Desktop
+
+**Linux/macOS:**
 ```bash
 ./run-javafx-fixed.sh
 ```
+
+**Windows:**
+```cmd
+run-javafx.bat
+```
+
 - ⚠️ **Pode ter problemas no macOS Apple Silicon**
 - ✅ **Interface gráfica moderna**
 - ✅ **Conecta ao PostgreSQL**
 - 📦 **Download automático**: JavaFX 21 + drivers
 
 ### 4. 🔧 SQLite Local (Fallback)
+
+**Linux/macOS:**
 ```bash
 ./run-simple.sh
 ```
+
+**Windows:**
+```cmd
+run-simple.bat
+```
+
 - ✅ **Backend local simples**
 - ✅ **Sem dependências externas**
 - 📦 **Download automático**: SQLite driver
