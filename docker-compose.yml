@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: jogos_postgres
+    environment:
+      POSTGRES_DB: sistemaregistrojogos
+      POSTGRES_USER: jogos_user
+      POSTGRES_PASSWORD: jogos_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jogos_user -d sistemaregistrojogos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Interface de administração do banco
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: jogos_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@jogos.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Redis para cache (opcional)
+  redis:
+    image: redis:7-alpine
+    container_name: jogos_redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    name: jogos_network 

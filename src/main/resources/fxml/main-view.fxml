@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sistemaregistrojogos.view.MainController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <!-- Header -->
+            <HBox alignment="CENTER" styleClass="header">
+               <children>
+                  <Label styleClass="title" text="Sistema de Registro de Jogos">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </HBox>
+            
+            <!-- Toolbar -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="toolbar">
+               <children>
+                  <Button fx:id="btnNovo" mnemonicParsing="false" onAction="#handleNovo" styleClass="btn-primary" text="Novo Jogo" />
+                  <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#handleEditar" styleClass="btn-secondary" text="Editar" />
+                  <Button fx:id="btnExcluir" mnemonicParsing="false" onAction="#handleExcluir" styleClass="btn-danger" text="Excluir" />
+                  <Separator orientation="VERTICAL" />
+                  <TextField fx:id="txtBusca" promptText="Buscar por nome..." />
+                  <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#handleBuscar" styleClass="btn-secondary" text="Buscar" />
+                  <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#handleLimpar" styleClass="btn-secondary" text="Limpar" />
+                  <Separator orientation="VERTICAL" />
+                  <ComboBox fx:id="cmbGenero" promptText="Filtrar por gênero" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   
+   <center>
+      <!-- Tabela de jogos -->
+      <TableView fx:id="tableJogos" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="colId" maxWidth="80.0" minWidth="60.0" prefWidth="70.0" text="ID" />
+          <TableColumn fx:id="colNome" minWidth="150.0" prefWidth="200.0" text="Nome" />
+          <TableColumn fx:id="colPreco" maxWidth="100.0" minWidth="80.0" prefWidth="90.0" text="Preço" />
+          <TableColumn fx:id="colGenero" minWidth="120.0" prefWidth="140.0" text="Gênero" />
+          <TableColumn fx:id="colDesenvolvedora" minWidth="150.0" prefWidth="170.0" text="Desenvolvedora" />
+          <TableColumn fx:id="colPlataforma" minWidth="100.0" prefWidth="120.0" text="Plataforma" />
+          <TableColumn fx:id="colAno" maxWidth="80.0" minWidth="60.0" prefWidth="70.0" text="Ano" />
+          <TableColumn fx:id="colClassificacao" maxWidth="100.0" minWidth="80.0" prefWidth="90.0" text="Nota" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+      </TableView>
+   </center>
+   
+   <bottom>
+      <!-- Status bar -->
+      <HBox alignment="CENTER_LEFT" styleClass="status-bar">
+         <children>
+            <Label fx:id="lblStatus" text="Pronto" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblTotalJogos" text="Total: 0 jogos" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   
+   <right>
+      <!-- Painel de detalhes -->
+      <VBox fx:id="panelDetalhes" minWidth="300.0" prefWidth="320.0" styleClass="details-panel" BorderPane.alignment="CENTER">
+         <children>
+            <Label styleClass="section-title" text="Detalhes do Jogo">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+               <content>
+                  <VBox spacing="10.0">
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Nome:" />
+                              <Label fx:id="lblDetalheNome" styleClass="field-value" text="-" wrapText="true" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Preço:" />
+                              <Label fx:id="lblDetalhePreco" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Gênero:" />
+                              <Label fx:id="lblDetalheGenero" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Desenvolvedora:" />
+                              <Label fx:id="lblDetalheDesenvolvedora" styleClass="field-value" text="-" wrapText="true" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Plataforma:" />
+                              <Label fx:id="lblDetalhePlataforma" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Ano de Lançamento:" />
+                              <Label fx:id="lblDetalheAno" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Classificação:" />
+                              <Label fx:id="lblDetalheClassificacao" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Descrição:" />
+                              <Label fx:id="lblDetalheDescricao" styleClass="field-value" text="-" wrapText="true" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Data de Cadastro:" />
+                              <Label fx:id="lblDetalheDataCadastro" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                        
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label styleClass="field-label" text="Última Atualização:" />
+                              <Label fx:id="lblDetalheDataAtualizacao" styleClass="field-value" text="-" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
+   </right>
+</BorderPane> 
