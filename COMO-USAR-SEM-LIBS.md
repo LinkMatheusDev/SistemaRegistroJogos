@@ -15,26 +15,36 @@ Quando você clonar este repositório, **NÃO** haverá arquivos `.jar` na pasta
 **TODOS os scripts baixam as dependências automaticamente!**
 
 ### 🚀 Opção 1: Setup Completo (Recomendado)
+
+#### Linux/macOS:
 ```bash
 # Baixa TODAS as dependências de uma vez
 ./setup.sh
+```
 
-# O que o script faz:
-# ✅ Detecta sua plataforma (macOS/Linux/Windows)
-# ✅ Baixa JavaFX para sua arquitetura específica
-# ✅ Baixa drivers de banco de dados
-# ✅ Baixa sistema de logs
-# ✅ Compila o projeto
-# ✅ Testa se tudo funciona
+#### Windows:
+```cmd
+:: Opção 1: Batch (funciona em qualquer Windows)
+setup.bat
+
+:: Opção 2: PowerShell (mais avançado, com barras de progresso)
+powershell -ExecutionPolicy Bypass -File setup.ps1
 ```
 
 ### 🎯 Opção 2: Execução Direta
-```bash
-# Cada script baixa suas dependências automaticamente:
 
+#### Linux/macOS:
+```bash
 ./run-console-postgres.sh    # ⬇️ SQLite + PostgreSQL
 ./run-javafx-fixed.sh       # ⬇️ JavaFX + drivers
 ./run-simple.sh            # ⬇️ SQLite + logs
+```
+
+#### Windows:
+```cmd
+run-simple.bat             :: ⬇️ SQLite + logs
+run-javafx.bat             :: ⬇️ JavaFX + drivers
+docker-compose up -d       :: 🐳 PostgreSQL
 ```
 
 ## 📦 O que é baixado automaticamente?
@@ -53,49 +63,53 @@ lib/
 ├── postgresql-42.6.0.jar            # PostgreSQL driver
 ├── slf4j-api-2.0.7.jar              # Sistema de logs
 ├── slf4j-simple-2.0.7.jar           # Logs implementação
-├── javafx-base-21.0.1-mac-aarch64.jar    # JavaFX Core
-├── javafx-controls-21.0.1-mac-aarch64.jar # JavaFX UI
-├── javafx-fxml-21.0.1-mac-aarch64.jar     # JavaFX FXML
-└── javafx-graphics-21.0.1-mac-aarch64.jar # JavaFX Gráficos
+├── javafx-base-21.0.1-win-x64.jar   # JavaFX Core (Windows)
+├── javafx-controls-21.0.1-win-x64.jar # JavaFX UI
+├── javafx-fxml-21.0.1-win-x64.jar     # JavaFX FXML
+└── javafx-graphics-21.0.1-win-x64.jar # JavaFX Gráficos
 ```
 
 > **Nota**: Os JARs do JavaFX variam por plataforma:
 > - `mac-aarch64` (macOS Apple Silicon)
 > - `mac-x64` (macOS Intel)
 > - `linux-x64` (Linux)
-> - `win-x64` (Windows)
+> - `win-x64` (Windows 64-bit)
+> - `win-aarch64` (Windows ARM)
 
 ## 🔄 Como Funciona o Download?
 
-### 1. Detecção Automática
+### Linux/macOS (Bash):
 ```bash
 # Scripts detectam automaticamente:
-OS=$(uname -s)        # Darwin, Linux, MINGW
+OS=$(uname -s)        # Darwin, Linux
 ARCH=$(uname -m)      # arm64, x86_64, amd64
+
+# Download com curl
+curl -L -o "lib/arquivo.jar" "https://repo1.maven.org/..."
 ```
 
-### 2. Download Inteligente
-```bash
-# Só baixa se não existir
-if [ ! -f "lib/arquivo.jar" ]; then
-    curl -L -o "lib/arquivo.jar" "https://repo1.maven.org/..."
-fi
+### Windows (Batch):
+```batch
+REM Detectar arquitetura
+set ARCH=x64
+if "%PROCESSOR_ARCHITECTURE%"=="ARM64" set ARCH=aarch64
+
+REM Download com PowerShell
+powershell -Command "Invoke-WebRequest -Uri '%URL%' -OutFile '%FILE%'"
 ```
 
-### 3. Verificação
-```bash
-# Verifica se download foi bem-sucedido
-if [ $? -eq 0 ]; then
-    echo "✅ Dependência baixada"
-else
-    echo "❌ Erro no download"
-    exit 1
-fi
+### Windows (PowerShell):
+```powershell
+# Download com barra de progresso
+$webClient = New-Object System.Net.WebClient
+$webClient.DownloadFile($Url, $FilePath)
 ```
 
 ## 🛠️ Solução de Problemas
 
 ### ❌ "Dependências não encontradas"
+
+#### Linux/macOS:
 ```bash
 # Solução 1: Execute setup
 ./setup.sh
@@ -107,7 +121,19 @@ fi
 ping google.com
 ```
 
-### ❌ "curl: command not found"
+#### Windows:
+```cmd
+:: Solução 1: Execute setup
+setup.bat
+
+:: Solução 2: Execute qualquer script
+run-simple.bat
+
+:: Solução 3: Verificar conexão
+ping google.com
+```
+
+### ❌ "curl: command not found" (Linux/macOS)
 ```bash
 # macOS: Instalar ferramentas de desenvolvimento
 xcode-select --install
@@ -119,13 +145,33 @@ sudo apt update && sudo apt install curl
 sudo yum install curl
 ```
 
+### ❌ "PowerShell execution policy" (Windows)
+```powershell
+# Permitir execução de scripts PowerShell (uma vez só)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Ou executar diretamente:
+powershell -ExecutionPolicy Bypass -File setup.ps1
+```
+
 ### ❌ Download interrompido
+
+#### Linux/macOS:
 ```bash
 # Limpar downloads parciais
 rm -rf lib/*.jar
 
 # Tentar novamente
 ./setup.sh
+```
+
+#### Windows:
+```cmd
+:: Limpar downloads parciais
+del lib\*.jar
+
+:: Tentar novamente
+setup.bat
 ```
 
 ## 📋 Lista de Dependências
@@ -146,46 +192,76 @@ rm -rf lib/*.jar
 
 ## 🎯 Primeira Execução
 
-### Usuário Novo
+### Linux/macOS:
 ```bash
-# Comando único para ter tudo funcionando:
+# Usuário Novo
 git clone <repo> && cd SistemaRegistroJogos && ./setup.sh
-```
 
-### Desenvolvedor
-```bash
-# Setup + execução
+# Desenvolvedor
 ./setup.sh && ./run-console-postgres.sh
+
+# Usuário Rápido
+./run-console-postgres.sh
 ```
 
-### Usuário Rápido
-```bash
-# Execução direta (download automático)
-./run-console-postgres.sh
+### Windows:
+```cmd
+:: Usuário Novo
+git clone <repo>
+cd SistemaRegistroJogos
+setup.bat
+
+:: Desenvolvedor
+setup.bat
+run-simple.bat
+
+:: Usuário Rápido
+run-simple.bat
 ```
 
 ## 💡 Dicas Avançadas
 
 ### Ver o que foi baixado
+
+#### Linux/macOS:
 ```bash
 ls -la lib/
-```
-
-### Verificar tamanhos
-```bash
 du -h lib/
 ```
 
+#### Windows:
+```cmd
+dir lib\
+dir lib\ /s
+```
+
 ### Re-baixar tudo
+
+#### Linux/macOS:
 ```bash
 rm -rf lib/
 ./setup.sh
 ```
 
-### Baixar apenas JavaFX
-```bash
-./run-javafx-fixed.sh  # Para e baixa só JavaFX
+#### Windows:
+```cmd
+rmdir /s /q lib
+setup.bat
 ```
+
+### Scripts Específicos por Plataforma
+
+#### Linux/macOS:
+- `setup.sh` - Setup completo
+- `run-console-postgres.sh` - Console + PostgreSQL
+- `run-javafx-fixed.sh` - JavaFX Desktop
+- `run-simple.sh` - SQLite local
+
+#### Windows:
+- `setup.bat` - Setup Batch simples
+- `setup.ps1` - Setup PowerShell avançado
+- `run-simple.bat` - SQLite local
+- `run-javafx.bat` - JavaFX Desktop
 
 ## 🏆 Vantagens do Sistema
 
@@ -193,16 +269,19 @@ rm -rf lib/
 - **Sem configuração**: Tudo funciona automaticamente
 - **Sempre atualizado**: Baixa versões mais recentes
 - **Multiplataforma**: Detecta seu sistema automaticamente
+- **Windows-friendly**: Scripts .bat funcionam em qualquer Windows
 
 ### ✅ Para Desenvolvedores
 - **Repositório limpo**: Sem arquivos grandes no Git
 - **CI/CD friendly**: Builds automatizados funcionam
 - **Versionamento**: Fácil alterar versões das dependências
+- **Cross-platform**: Mesmo código roda em Linux/macOS/Windows
 
 ### ✅ Para Distribuição
 - **Clone rápido**: Repositório leve
 - **Autocontido**: Usuário não precisa instalar nada manualmente
 - **Confiável**: Downloads sempre dos repositórios oficiais Maven
+- **Suporte Windows**: Funciona sem WSL ou ferramentas Linux
 
 ---
 
@@ -210,9 +289,16 @@ rm -rf lib/
 
 **Você NÃO precisa se preocupar com dependências!**
 
+### Linux/macOS:
 1. 📥 **Clone o projeto**
-2. 🚀 **Execute qualquer script**
+2. 🚀 **Execute: `./setup.sh`**
 3. ⏰ **Aguarde o download automático**
-4. ✅ **Use o sistema normalmente**
+4. ✅ **Use: `./run-console-postgres.sh`**
 
-**É simples assim!** 🎮 
+### Windows:
+1. 📥 **Clone o projeto**
+2. 🚀 **Execute: `setup.bat`**
+3. ⏰ **Aguarde o download automático**
+4. ✅ **Use: `run-simple.bat`**
+
+**É simples assim em qualquer sistema operacional!** 🎮 
